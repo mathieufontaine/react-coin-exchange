@@ -1,25 +1,96 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import React, { useState, useEffect } from "react";
+import Header from "./components/Header/Header";
+import CoinList from "./components/CoinList/CoinList";
+import AccountBalance from "./components/AccountBalance/AccountBalance";
+import styled from "styled-components";
+import axios from "axios";
 
-function App() {
+const Div = styled.div`
+  text-align: center;
+  background: #61dafb;
+`;
+
+const COIN_COUNT = 10;
+const formatPrice = price => parseFloat(Number(price).toFixed(2));
+
+const App = () => {
+  const [balance, setBalance] = useState(1000);
+  const [showBalance, setShowBalance] = useState(true);
+  const [coinData, setCoinData] = useState([]);
+
+  useEffect(() => {
+    if (coinData.length === 0) {
+      // component did mount
+      fetchData();
+    } else {
+      // component did update
+      // autoPriceRefresh();
+    }
+  });
+
+  const fetchData = async () => {
+    const response = await axios.get("https://api.coinpaprika.com/v1/coins");
+    const coinIds = response.data.slice(0, COIN_COUNT).map(coin => coin.id);
+    const tickerUrl = "https://api.coinpaprika.com/v1/tickers/";
+    const promises = coinIds.map(id => axios.get(tickerUrl + id));
+    const coinData = await Promise.all(promises);
+    const newCoinData = coinData.map(function(response) {
+      const coin = response.data;
+      return {
+        key: coin.id,
+        name: coin.name,
+        ticker: coin.symbol,
+        balance: 0,
+        price: formatPrice(coin.quotes.USD.price)
+      };
+    });
+    setCoinData(newCoinData);
+  };
+
+  const autoPriceRefresh = () => {
+    setInterval(() => {
+      coinData.forEach(coin => handleRefresh(coin.ticker));
+    }, 1000);
+  };
+
+  const handleRefresh = async id => {
+    // const coin = state.coinData.find(coin => coin.key === id);
+    const response = await axios.get(
+      `https://api.coinpaprika.com/v1/tickers/${id}`
+    );
+    const newPrice = formatPrice(response.data.quotes.USD.price);
+    const newCoinData = coinData.map(coin => {
+      // debugger;
+      let newCoin = { ...coin };
+      if (id === coin.key) {
+        newCoin.price = newPrice;
+      }
+      return newCoin;
+    });
+    setCoinData(newCoinData);
+  };
+
+  const handleBalanceState = () => {
+    setShowBalance(!showBalance);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Div>
+      <Header name="Mat" />
+      <AccountBalance
+        amount={balance}
+        showBalance={showBalance}
+        handleBalanceState={handleBalanceState}
+      />
+      <CoinList
+        coinData={coinData}
+        handleRefresh={handleRefresh}
+        amount={balance}
+        showBalance={showBalance}
+      />
+    </Div>
   );
-}
+};
 
 export default App;
