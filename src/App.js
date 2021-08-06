@@ -5,10 +5,12 @@ import CoinList from "./components/CoinList/CoinList";
 import AccountBalance from "./components/AccountBalance/AccountBalance";
 import styled from "styled-components";
 import axios from "axios";
+import "bootswatch/dist/flatly/bootstrap.min.css";
+import "@fortawesome/fontawesome-free/js/all";
 
 const Div = styled.div`
   text-align: center;
-  background: #61dafb;
+  background: white;
 `;
 
 const COIN_COUNT = 10;
@@ -29,6 +31,10 @@ const App = () => {
     }
   });
 
+  const addMoney = () => {
+    setBalance(balance + 1000);
+  };
+
   const fetchData = async () => {
     const response = await axios.get("https://api.coinpaprika.com/v1/coins");
     const coinIds = response.data.slice(0, COIN_COUNT).map(coin => coin.id);
@@ -41,11 +47,13 @@ const App = () => {
         key: coin.id,
         name: coin.name,
         ticker: coin.symbol,
+        rank: coin.rank,
         balance: 0,
         price: formatPrice(coin.quotes.USD.price)
       };
     });
     setCoinData(newCoinData);
+    autoPriceRefresh();
   };
 
   const autoPriceRefresh = () => {
@@ -82,6 +90,7 @@ const App = () => {
         amount={balance}
         showBalance={showBalance}
         handleBalanceState={handleBalanceState}
+        addMoney={addMoney}
       />
       <CoinList
         coinData={coinData}

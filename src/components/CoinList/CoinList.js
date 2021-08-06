@@ -4,8 +4,15 @@ import styled from "styled-components";
 
 const Table = styled.table`
   display: inline-block;
-  margin: 30px auto;
+  margin: 0 auto 30px;
   font-size: 1.5rem;
+  border-color: #7fa0cf;
+`;
+
+const Th = styled.th`
+  background-color: #282c34;
+  color: white;
+  padding: 10px;
 `;
 
 const CoinList = ({ coinData, handleRefresh, amount, showBalance }) => {
@@ -14,12 +21,12 @@ const CoinList = ({ coinData, handleRefresh, amount, showBalance }) => {
       <Table>
         <thead>
           <tr>
-            <th>Name</th>
-            <th>ticker</th>
-            <th>Price</th>
-            <th>Rank</th>
-            <th>Balance</th>
-            <th>Actions</th>
+            <Th>Name</Th>
+            <Th>ticker</Th>
+            <Th>Price</Th>
+            <Th>Rank</Th>
+            <Th>Balance</Th>
+            <Th>Actions</Th>
           </tr>
         </thead>
         <tbody>

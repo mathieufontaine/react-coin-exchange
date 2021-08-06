@@ -4,12 +4,12 @@ import React from "react";
 import styled from "styled-components";
 
 const Td = styled.td`
-  border: 1px solid white;
+  border: 1px solid #282c34;
   width: 25vh;
 `;
 
 const Tr = styled.tr`
-  border: 1px solid white;
+  border: 1px solid #282c34;
   width: 25vh;
 `;
 
@@ -25,9 +25,11 @@ const Coin = props => {
         <Td>{props.ticker}</Td>
         <Td>$ {props.price}</Td>
         <Td>{props.rank}</Td>
-        <Td>${props.showBalance ? props.amount : "****"}</Td>
+        <Td>${props.showBalance ? props.balance : "****"}</Td>
         <Td>
-          <button onClick={handleClick}>Refresh</button>
+          <button className="btn btn-info" onClick={handleClick}>
+            Refresh
+          </button>
         </Td>
       </Tr>
     </>
