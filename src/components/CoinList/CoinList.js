@@ -15,7 +15,13 @@ const Th = styled.th`
   padding: 10px;
 `;
 
-const CoinList = ({ coinData, handleRefresh, amount, showBalance }) => {
+const CoinList = ({
+  coinData,
+  handleRefresh,
+  handleTransaction,
+  amount,
+  showBalance
+}) => {
   return (
     <div>
       <Table>
@@ -25,19 +31,22 @@ const CoinList = ({ coinData, handleRefresh, amount, showBalance }) => {
             <Th>ticker</Th>
             <Th>Price</Th>
             <Th>Rank</Th>
+            <Th>Unit</Th>
             <Th>Balance</Th>
             <Th>Actions</Th>
           </tr>
         </thead>
         <tbody>
-          {coinData.map(({ key, name, ticker, price, rank, balance }) => (
+          {coinData.map(({ key, name, ticker, price, rank, unit, balance }) => (
             <Coin
               key={key}
               tickerId={key}
               handleRefresh={handleRefresh}
+              handleTransaction={handleTransaction}
               name={name}
               ticker={ticker}
               rank={rank}
+              unit={unit}
               price={price}
               balance={balance}
               amount={amount}

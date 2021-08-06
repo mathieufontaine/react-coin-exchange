@@ -8,14 +8,36 @@ const Td = styled.td`
   width: 25vh;
 `;
 
+const TdActions = styled(Td)`
+  width: 35vh;
+`;
+
 const Tr = styled.tr`
   border: 1px solid #282c34;
   width: 25vh;
 `;
 
+const Button = styled.button`
+  display: block;
+  margin: auto;
+  width: 100%;
+  border-radius: 0;
+  margin: 0;
+`;
+
+const ButtonAction = styled.button`
+  width: 50%;
+  border-radius: 0;
+  margin: 0;
+`;
+
 const Coin = props => {
   const handleClick = () => {
     props.handleRefresh(props.tickerId);
+  };
+
+  const handleAction = isBuy => {
+    props.handleTransaction(props.tickerId, isBuy);
   };
 
   return (
@@ -25,12 +47,25 @@ const Coin = props => {
         <Td>{props.ticker}</Td>
         <Td>$ {props.price}</Td>
         <Td>{props.rank}</Td>
+        <Td>{props.unit}</Td>
         <Td>${props.showBalance ? props.balance : "****"}</Td>
-        <Td>
-          <button className="btn btn-info" onClick={handleClick}>
+        <TdActions>
+          <Button className="btn btn-info" onClick={handleClick}>
             Refresh
-          </button>
-        </Td>
+          </Button>
+          <ButtonAction
+            className="btn btn-success"
+            onClick={() => handleAction(true)}
+          >
+            Buy
+          </ButtonAction>
+          <ButtonAction
+            className="btn btn-danger"
+            onClick={() => handleAction(false)}
+          >
+            Sell
+          </ButtonAction>
+        </TdActions>
       </Tr>
     </>
   );

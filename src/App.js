@@ -48,12 +48,13 @@ const App = () => {
         name: coin.name,
         ticker: coin.symbol,
         rank: coin.rank,
+        unit: 0,
         balance: 0,
         price: formatPrice(coin.quotes.USD.price)
       };
     });
     setCoinData(newCoinData);
-    autoPriceRefresh();
+    // autoPriceRefresh();
   };
 
   const autoPriceRefresh = () => {
@@ -68,7 +69,7 @@ const App = () => {
       `https://api.coinpaprika.com/v1/tickers/${id}`
     );
     const newPrice = formatPrice(response.data.quotes.USD.price);
-    const newCoinData = coinData.map(coin => {
+    const newCoinData = coinData.map(function(coin) {
       // debugger;
       let newCoin = { ...coin };
       if (id === coin.key) {
@@ -76,6 +77,27 @@ const App = () => {
       }
       return newCoin;
     });
+    setCoinData(newCoinData);
+  };
+
+  const handleTransaction = (id, isBuy) => {
+    let amount = 0;
+    const newCoinData = coinData.map(function(coin) {
+      let newCoin = { ...coin };
+      if (id === coin.key) {
+        if (isBuy === true) {
+          newCoin.balance += newCoin.price;
+          newCoin.unit += 1;
+          amount -= newCoin.price;
+        } else {
+          newCoin.balance -= newCoin.price;
+          newCoin.unit -= 1;
+          amount = newCoin.price;
+        }
+      }
+      return newCoin;
+    });
+    setBalance(balance + amount);
     setCoinData(newCoinData);
   };
 
@@ -95,6 +117,7 @@ const App = () => {
       <CoinList
         coinData={coinData}
         handleRefresh={handleRefresh}
+        handleTransaction={handleTransaction}
         amount={balance}
         showBalance={showBalance}
       />
