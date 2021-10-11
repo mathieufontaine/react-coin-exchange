@@ -5,8 +5,9 @@ import styled from "styled-components";
 const Table = styled.table`
   display: inline-block;
   margin: 0 auto 30px;
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   border-color: #7fa0cf;
+  max-width: 1000px;
 `;
 
 const Th = styled.th`
@@ -19,7 +20,7 @@ const CoinList = ({
   coinData,
   handleRefresh,
   handleTransaction,
-  amount,
+  accountBalance,
   showBalance
 }) => {
   return (
@@ -27,10 +28,10 @@ const CoinList = ({
       <Table>
         <thead>
           <tr>
+            <Th>Rank</Th>
             <Th>Name</Th>
             <Th>ticker</Th>
             <Th>Price</Th>
-            <Th>Rank</Th>
             <Th>Unit</Th>
             <Th>Balance</Th>
             <Th>Actions</Th>
@@ -49,7 +50,7 @@ const CoinList = ({
               unit={unit}
               price={price}
               balance={balance}
-              amount={amount}
+              accountBalance={accountBalance}
               showBalance={showBalance}
             />
           ))}

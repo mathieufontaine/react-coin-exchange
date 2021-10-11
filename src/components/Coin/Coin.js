@@ -37,20 +37,25 @@ const Coin = props => {
   };
 
   const handleAction = isBuy => {
-    props.handleTransaction(props.tickerId, isBuy);
+    if (
+      (isBuy === true && props.accountBalance > props.price) ||
+      (isBuy === false && props.unit > 0)
+    ) {
+      props.handleTransaction(props.tickerId, isBuy);
+    }
   };
 
   return (
     <>
       <Tr>
+        <Td>{props.rank}</Td>
         <Td>{props.name}</Td>
         <Td>{props.ticker}</Td>
         <Td>$ {props.price}</Td>
-        <Td>{props.rank}</Td>
         <Td>{props.unit}</Td>
         <Td>${props.showBalance ? props.balance : "****"}</Td>
         <TdActions>
-          <Button className="btn btn-info" onClick={handleClick}>
+          <Button className="btn btn-info" onClick={() => handleClick}>
             Refresh
           </Button>
           <ButtonAction

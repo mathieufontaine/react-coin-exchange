@@ -13,11 +13,11 @@ const Div = styled.div`
   background: white;
 `;
 
-const COIN_COUNT = 10;
+const COIN_COUNT = 20;
 const formatPrice = price => parseFloat(Number(price).toFixed(2));
 
 const App = () => {
-  const [balance, setBalance] = useState(1000);
+  const [accountBalance, setAccountBalance] = useState(1000);
   const [showBalance, setShowBalance] = useState(true);
   const [coinData, setCoinData] = useState([]);
 
@@ -25,14 +25,11 @@ const App = () => {
     if (coinData.length === 0) {
       // component did mount
       fetchData();
-    } else {
-      // component did update
-      // autoPriceRefresh();
     }
   });
 
   const addMoney = () => {
-    setBalance(balance + 1000);
+    setAccountBalance(accountBalance + 1000);
   };
 
   const fetchData = async () => {
@@ -54,13 +51,13 @@ const App = () => {
       };
     });
     setCoinData(newCoinData);
-    // autoPriceRefresh();
+    autoPriceRefresh();
   };
 
   const autoPriceRefresh = () => {
     setInterval(() => {
       coinData.forEach(coin => handleRefresh(coin.ticker));
-    }, 1000);
+    }, 10000);
   };
 
   const handleRefresh = async id => {
@@ -97,7 +94,7 @@ const App = () => {
       }
       return newCoin;
     });
-    setBalance(balance + amount);
+    setAccountBalance(accountBalance + amount);
     setCoinData(newCoinData);
   };
 
@@ -109,7 +106,7 @@ const App = () => {
     <Div>
       <Header name="Mat" />
       <AccountBalance
-        amount={balance}
+        accountBalance={accountBalance}
         showBalance={showBalance}
         handleBalanceState={handleBalanceState}
         addMoney={addMoney}
@@ -118,7 +115,7 @@ const App = () => {
         coinData={coinData}
         handleRefresh={handleRefresh}
         handleTransaction={handleTransaction}
-        amount={balance}
+        accountBalance={accountBalance}
         showBalance={showBalance}
       />
     </Div>

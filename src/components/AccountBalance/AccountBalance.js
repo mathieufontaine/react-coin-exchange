@@ -38,7 +38,9 @@ const formatter = Intl.NumberFormat("en-US", {
 
 const AccountBalance = props => {
   const button = props.showBalance ? "Hide Balance" : "Show Balance";
-  const amount = props.showBalance ? formatter.format(props.amount) : "****";
+  const amount = props.showBalance
+    ? formatter.format(props.accountBalance)
+    : "****";
   const btnClass = "btn " + (props.showBalance ? "btn-info" : "btn-warning");
 
   return (
